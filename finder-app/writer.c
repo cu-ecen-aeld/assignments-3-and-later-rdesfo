@@ -4,6 +4,7 @@
  *
  * resources:
  * https://stackoverflow.com/questions/49247612/how-can-i-check-if-the-value-of-argvi-is-null-and-if-it-is-true-end-the-progra
+ * https://www.freecodecamp.org/news/file-handling-in-c-how-to-open-close-and-write-to-files/
  */
 
 #include <stdio.h>
