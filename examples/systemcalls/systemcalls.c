@@ -17,7 +17,12 @@ bool do_system(const char *cmd)
  *   or false() if it returned a failure
 */
 
-    return true;
+    int resp = system(cmd);
+    if (resp == 0){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -58,10 +63,23 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
+    pid_t pid;
+    pid = fork();
+    if (pid == -1){
+        return false;
+    }
 
+    int resp = execv(command[0], &command[1]);
+
+    pid_t wpid = waitpid(-1, &resp, 0);
+
+    if (wpid == 0){
+        return true;
+    } else {
+        return false;
+    }
     va_end(args);
 
-    return true;
 }
 
 /**
