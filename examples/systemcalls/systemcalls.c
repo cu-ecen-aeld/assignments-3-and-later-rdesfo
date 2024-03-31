@@ -63,8 +63,7 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
-    pid_t pid;
-    pid = fork();
+    pid_t pid = fork();
     if (pid == -1){
         return false;
     }
@@ -111,7 +110,41 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
+
+int fd = open("redirected.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
+
+if (fd < 0) {
+    return false;
+}
+
+int kidpid;
+switch (kidpid = fork()) {
+  case -1: return false;
+  case 0:
+    if (dup2(fd, 1) < 0) {
+        return false;
+    }
+    dup(0);
+    pid_t pid = fork();
+    if (pid == -1){
+        return false;
+    }
+
+    int resp = execv(command[0], &command[1]);
+
+    pid_t wpid = waitpid(-1, &resp, 0);
+
+    if (wpid == 0){
+        return true;
+    } else {
+        return false;
+    }
+    close(fd);
+  default:
+    close(fd);
+    return false;
+    /* do whatever the parent wants to do. */
+}
     va_end(args);
 
-    return true;
 }
