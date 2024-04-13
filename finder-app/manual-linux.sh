@@ -35,6 +35,17 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     git checkout ${KERNEL_VERSION}
 
     # TODO: Add your kernel build steps here
+    CROSS_DIR=$(cd ${FINDER_APP_DIR}/../gcc*/bin/ && pwd)
+    #clean
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_DIR}/${CROSS_COMPILE} mrproper
+    #defconfig
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_DIR}/${CROSS_COMPILE} defconfig
+    #build kernel image
+    make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_DIR}/${CROSS_COMPILE} all
+    #build modules
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_DIR}/${CROSS_COMPILE} modules
+    #build devicetree
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_DIR}/${CROSS_COMPILE} dtbs
 fi
 
 echo "Adding the Image in outdir"
