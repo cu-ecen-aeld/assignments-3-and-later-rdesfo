@@ -13,4 +13,4 @@ clean : ## remove writer and all *.o files
 
 CROSS_COMPILE :  ## cross compile writer
 	export PATH=$PATH:$(pwd)/../gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin
-	aarch64-none-linux-gnu-gcc finder-app/writer.c -o finder-app/writer
+	aarch64-none-linux-gnu-gcc writer.c -o writer
